@@ -8,10 +8,12 @@ from discord.ext import commands
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 GUILD = os.getenv('DISCORD_GUILD')
+MY_USER = os.getenv('DISCORD_USER')
 
 intents = discord.Intents.all()
 # client = discord.Client(intents=intents)
-bot = commands.Bot(command_prefix='£', intents=intents)
+command_prefix = '£'
+bot = commands.Bot(command_prefix=command_prefix, intents=intents)
 
 bot.im_dad = False
 
@@ -46,7 +48,7 @@ async def on_message(message):
     if message.content == 'raise-exception':
         raise discord.DiscordException
     elif any(im in message.content for im in imList):
-        if bot.im_dad:
+        if bot.im_dad and message.content != (command_prefix + 'imdad'):
             cut_message = message.content
             for i in range(0, len(imList)):
                 cut_message = cut_message.split('im', 1)[-1]
@@ -57,8 +59,9 @@ async def on_message(message):
 
 @bot.command(name='imdad', help='Toggles the \'Hi, ..., I\'m dad!\' functionality')
 async def im_dad(ctx):
-    bot.im_dad = not bot.im_dad
-    await ctx.send('Terrible dad jokes enabled? ' + str(bot.im_dad))
+    if str(ctx.message.author) == MY_USER:
+        bot.im_dad = not bot.im_dad
+        await ctx.send('Terrible dad jokes enabled? ' + str(bot.im_dad))
 
 @bot.command(name='joke', help='Tells a very, very bad joke')
 # ctx is short for context
