@@ -38,10 +38,17 @@ async def on_message(message):
     if message.author == bot.user:
         return
 
+    imList = ['im', 'i\'m', 'Im', 'I\'m']
     # add events here
 
     if message.content == 'raise-exception':
         raise discord.DiscordException
+    elif any(im in message.content for im in imList):
+        cut_message = message.content
+        for i in range(0, len(imList)):
+            cut_message = cut_message.split('im', 1)[-1]
+        response = 'Hi,' + cut_message + ', I\'m dad!'
+        await message.channel.send(response)
     
     await bot.process_commands(message)
 
@@ -50,7 +57,6 @@ async def on_message(message):
 async def bad_joke(ctx):
     response = 'We know that 6 is afraid of 7 because 7 8 9, but why did 7 eat 9?\nBecause you should eat 3 squared meals a day!'
     await ctx.send(response)
-
 
 # run cat err.log to view the error message if it has been raised
 @bot.event
