@@ -13,6 +13,8 @@ intents = discord.Intents.all()
 # client = discord.Client(intents=intents)
 bot = commands.Bot(command_prefix='£', intents=intents)
 
+bot.im_dad = False
+
 @bot.event
 async def on_ready():
     guild = discord.utils.get(bot.guilds, name=GUILD)
@@ -44,13 +46,19 @@ async def on_message(message):
     if message.content == 'raise-exception':
         raise discord.DiscordException
     elif any(im in message.content for im in imList):
-        cut_message = message.content
-        for i in range(0, len(imList)):
-            cut_message = cut_message.split('im', 1)[-1]
-        response = 'Hi,' + cut_message + ', I\'m dad!'
-        await message.channel.send(response)
+        if bot.im_dad:
+            cut_message = message.content
+            for i in range(0, len(imList)):
+                cut_message = cut_message.split('im', 1)[-1]
+            response = 'Hi,' + cut_message + ', I\'m dad!'
+            await message.channel.send(response)
     
     await bot.process_commands(message)
+
+@bot.command(name='imdad', help='Toggles the \'Hi, ..., I\'m dad!\' functionality')
+async def im_dad(ctx):
+    bot.im_dad = not bot.im_dad
+    await ctx.send('Terrible dad jokes enabled? ' + str(bot.im_dad))
 
 @bot.command(name='joke', help='Tells a very, very bad joke')
 # ctx is short for context

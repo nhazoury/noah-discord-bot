@@ -1,2 +1,5 @@
 # contains API stuff, so best to hide it!
 .env
+
+# error log, no point in pushing this
+err.log
