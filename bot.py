@@ -72,7 +72,7 @@ async def bad_joke(ctx):
 
 @bot.command(name='spam', help='Need to get someone\'s attention? Use this to spam them in their DMs. £spam num person')
 async def spam(ctx, num, person: discord.Member = None):
-    if person == bot.user:
+    if person == bot.user or int(num) > 50:
         return
     await person.create_dm()
     for i in range(0, int(num)):
