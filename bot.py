@@ -69,10 +69,11 @@ async def bad_joke(ctx):
     response = 'We know that 6 is afraid of 7 because 7 8 9, but why did 7 eat 9?\nBecause you should eat 3 squared meals a day!'
     await ctx.send(response)
 
-@bot.command(name='spam@', help='Need to get someone\'s attention? Use this to spam them in their DMs. £spam person num')
-async def spam(ctx, person, num):
+
+@bot.command(name='spam', help='Need to get someone\'s attention? Use this to spam them in their DMs. £spam num person')
+async def spam(ctx, num, person: discord.Member = None):
     await person.create_dm()
-    for i in range(0, num):
+    for i in range(0, int(num)):
         await person.dm_channel.send(
             f'Hi {person.name}, {ctx.message.author.name} seems to be trying to get your attention...'
         )
