@@ -42,7 +42,7 @@ async def on_message(message):
     if message.author == bot.user:
         return
 
-    imList = ['im', 'i\'m', 'Im', 'I\'m']
+    imList = ['im', 'i\'m', 'Im', 'I\'m', 'IM', 'I\'M']
     # add events here
 
     if message.content == 'raise-exception':
@@ -51,7 +51,7 @@ async def on_message(message):
         if bot.im_dad and message.content != (command_prefix + 'imdad'):
             cut_message = message.content
             for i in range(0, len(imList)):
-                cut_message = cut_message.split(imList[i], 1)[-1]
+                cut_message = cut_message.split(imList[i] + ' ', 1)[-1]
             response = 'Hi,' + cut_message + ', I\'m dad!'
             await message.channel.send(response)
     
