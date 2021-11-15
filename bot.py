@@ -51,7 +51,7 @@ async def on_message(message):
         if bot.im_dad and message.content != (command_prefix + 'imdad'):
             cut_message = message.content
             for i in range(0, len(imList)):
-                cut_message = cut_message.split(imList[i], 1)[-1]
+                cut_message = cut_message.split(imList[i] + ' ', 1)[-1]
             response = 'Hi,' + cut_message + ', I\'m dad!'
             await message.channel.send(response)
     
@@ -77,6 +77,8 @@ async def spam(ctx, num, person: discord.Member = None):
         await person.dm_channel.send(
             f'Hi {person.name}, {ctx.message.author.name} seems to be trying to get your attention...'
         )
+
+# @bot.command(name='remind', help='To remind people of some event')
 
 # run cat err.log to view the error message if it has been raised
 @bot.event
