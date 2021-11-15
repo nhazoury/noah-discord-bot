@@ -51,8 +51,8 @@ async def on_message(message):
         if bot.im_dad and message.content != (command_prefix + 'imdad'):
             cut_message = message.content
             for i in range(0, len(imList)):
-                cut_message = cut_message.split(imList[i] + ' ', 1)[-1]
-            response = 'Hi,' + cut_message + ', I\'m dad!'
+                cut_message = cut_message.split(imList[i], 1)[-1]
+            response = 'Hi, ' + cut_message + ', I\'m dad!'
             await message.channel.send(response)
     
     await bot.process_commands(message)
