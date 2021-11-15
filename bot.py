@@ -79,6 +79,7 @@ async def spam(ctx, num, person: discord.Member = None):
         await person.dm_channel.send(
             f'Hi {person.name}, {ctx.message.author.name} seems to be trying to get your attention...'
         )
+    await ctx.send('Done spamming!')
 
 # @bot.command(name='remind', help='To remind people of some event')
 
