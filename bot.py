@@ -9,6 +9,8 @@ load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 GUILD = os.getenv('DISCORD_GUILD')
 MY_USER = os.getenv('DISCORD_USER')
+DESTINY_BOT = os.getenv('DISCORD_DESTINY_BOT')
+DESTINY_BOT_CHANNEL = os.getenv('DISCORD_DESTINY_BOT_CHANNEL')
 
 intents = discord.Intents.all()
 # client = discord.Client(intents=intents)
@@ -54,6 +56,11 @@ async def on_message(message):
                 cut_message = cut_message.split(imList[i], 1)[-1]
             response = 'Hi, ' + cut_message + ', I\'m dad!'
             await message.channel.send(response)
+    # for using the Discord bot Charlemagne (https://warmind.io/). This way, when organising
+    # events in #lfg, the event message generated is now pinned to the channel
+    elif message.author == DESTINY_BOT and message.channel == DESTINY_BOT_CHANNEL:
+        if 'Guardians Joined: ' in message.content:
+            await message.pin()
     
     await bot.process_commands(message)
 
