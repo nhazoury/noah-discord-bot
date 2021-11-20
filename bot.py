@@ -58,10 +58,11 @@ async def on_message(message):
             await message.channel.send(response)
     # for using the Discord bot Charlemagne (https://warmind.io/). This way, when organising
     # events in #lfg, the event message generated is now pinned to the channel
-    elif message.author == DESTINY_BOT and message.channel == DESTINY_BOT_CHANNEL:
-        if 'Guardians Joined: ' in message.content:
+    elif str(message.author) == DESTINY_BOT and str(message.channel) == DESTINY_BOT_CHANNEL:
+        print(message.embeds[0].fields[4])
+        if 'Guardians Joined: ' in message.embeds[0].fields[4].name:
             await message.pin()
-    
+
     await bot.process_commands(message)
 
 @bot.command(name='imdad', help='Toggles the \'Hi, ..., I\'m dad!\' functionality')
