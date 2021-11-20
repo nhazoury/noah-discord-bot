@@ -1,5 +1,6 @@
 # bot.py
 import os
+import ast
 
 import discord
 from dotenv import load_dotenv
@@ -11,6 +12,7 @@ GUILD = os.getenv('DISCORD_GUILD')
 MY_USER = os.getenv('DISCORD_USER')
 DESTINY_BOT = os.getenv('DISCORD_DESTINY_BOT')
 DESTINY_BOT_CHANNEL = os.getenv('DISCORD_DESTINY_BOT_CHANNEL')
+DESTINY_PLAYERS = ast.literal_eval(os.environ['DISCORD_DESTINY_PLAYERS'])
 
 intents = discord.Intents.all()
 # client = discord.Client(intents=intents)
@@ -18,6 +20,7 @@ command_prefix = '£'
 bot = commands.Bot(command_prefix=command_prefix, intents=intents)
 
 bot.im_dad = False
+destiny_events = {}
 
 @bot.event
 async def on_ready():
@@ -59,9 +62,15 @@ async def on_message(message):
     # for using the Discord bot Charlemagne (https://warmind.io/). This way, when organising
     # events in #lfg, the event message generated is now pinned to the channel
     elif str(message.author) == DESTINY_BOT and str(message.channel) == DESTINY_BOT_CHANNEL:
-        print(message.embeds[0].fields[4])
-        if 'Guardians Joined: ' in message.embeds[0].fields[4].name:
+        fireteam = message.embeds[0].fields[4]
+        eventid = message.embeds[0].fields[3].value
+        discord_team = []
+        if 'Guardians Joined: ' in fireteam.name:
             await message.pin()
+            for bungie_name in [*DESTINY_PLAYERS]:
+                if bungie_name in fireteam.value:
+                    discord_team.append(DESTINY_PLAYERS[bungie_name])
+            destiny_events[eventid] = discord_team 
 
     await bot.process_commands(message)
 
@@ -88,6 +97,16 @@ async def spam(ctx, num, person: discord.Member = None):
             f'Hi {person.name}, {ctx.message.author.name} seems to be trying to get your attention...'
         )
     await ctx.send('Done spamming!')
+
+@bot.command(name='destiny', help='Use to @ people for a Destiny 2 event, such as changing schedule, or a reminder')
+async def destiny(ctx, eventid: str):
+    team_members = destiny_events[eventid]
+    update = 'Update for event ' + eventid + ': '
+    for name in team_members:
+        split_name = name.split('#')
+        user = discord.utils.get(ctx.guild.members, name=split_name[0], discriminator=split_name[1])
+        update += (f"{user} ")
+    await ctx.send(update)
 
 # @bot.command(name='remind', help='To remind people of some event')
 
