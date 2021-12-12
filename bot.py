@@ -19,7 +19,7 @@ intents = discord.Intents.all()
 command_prefix = '£'
 bot = commands.Bot(command_prefix=command_prefix, intents=intents)
 
-bot.im_dad = False
+bot.im_dad = True
 destiny_events = {}
 
 @bot.event
